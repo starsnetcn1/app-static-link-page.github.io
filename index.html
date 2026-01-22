@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Opening App...</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background: #fff;
+        color: #333;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>正在打開 Mealry，請稍候…</div>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const type = params.get("type") || "home"; // 默认 type 可以是 home
+      const id = params.get("id") || "";
+
+      // App Deep Link
+      const APP_SCHEME_URL = id
+        ? `mealry-app://${type}/${id}`
+        : `mealry-app://home`;
+
+      // App Store / Play Store
+      const IOS_STORE_URL = "https://apps.apple.com/app/idXXXXXXXXX";
+      const ANDROID_STORE_URL =
+        "https://play.google.com/store/apps/details?id=hk.starsnet.mealry";
+
+      /**
+       * === 以下不用改 ===
+       */
+
+      const ua = navigator.userAgent.toLowerCase();
+      const isIOS = /iphone|ipad|ipod/.test(ua);
+      const isAndroid = /android/.test(ua);
+
+      let appOpened = false;
+      let fallbackTimer = null;
+
+      // 检测页面是否失去焦点（说明app打开了）
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          appOpened = true;
+          if (fallbackTimer) {
+            clearTimeout(fallbackTimer);
+          }
+        }
+      };
+
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+      window.addEventListener("blur", () => {
+        appOpened = true;
+        if (fallbackTimer) {
+          clearTimeout(fallbackTimer);
+        }
+      });
+
+      const openStore = () => {
+        if (!appOpened) {
+          if (isIOS) window.location.href = IOS_STORE_URL;
+          else if (isAndroid) window.location.href = ANDROID_STORE_URL;
+        }
+      };
+
+      const openApp = () => {
+        try {
+          // 直接使用 window.location.href 是最可靠的方式
+          window.location.href = APP_SCHEME_URL;
+
+          // 设置fallback：如果2.5秒内页面没有失去焦点，认为app未安装
+          fallbackTimer = setTimeout(openStore, 2500);
+        } catch (e) {
+          console.error("打开App失败:", e);
+          alert("打开App失败:" + e);
+          //          openStore();
+        }
+      };
+
+      // 尝试打开 App
+      openApp();
+    </script>
+  </body>
+</html>
