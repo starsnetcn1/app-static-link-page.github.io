@@ -1,0 +1,14 @@
+[
+	{
+		"relation": [
+			"delegate_permission/common.handle_all_urls"
+		],
+		"target": {
+			"namespace": "android_app",
+			"package_name": "hk.starsnet.mealry",
+			"sha256_cert_fingerprints": [
+				"20:05:6D:7A:B0:5F:23:F9:7F:85:A7:86:28:42:6D:8E:53:72:80:86:74:38:B9:E1:A0:7A:47:2F:3A:71:8F:03"
+			]
+		}
+	}
+]
