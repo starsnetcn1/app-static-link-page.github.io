@@ -5,7 +5,7 @@
 			{
 				"appID": "H39M55Z23U.hk.starsnet.mealry",
 				"paths": [
-					"*"
+					"/*"
 				]
 			}
 		]
